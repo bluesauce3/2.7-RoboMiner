@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float rotationSpeed;
     public float jumpStrength;
+    public bool isOnGround;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +30,16 @@ public class PlayerController : MonoBehaviour
         mouseXInput = Input.GetAxis("Mouse X");
         transform.Translate(new Vector3(horizontalInput, 0, verticalInput) * Time.deltaTime * speed);
         transform.Rotate(new Vector3(0, mouseXInput, 0) * rotationSpeed);
-        if (Input.GetKeyDown("space")) {
+        if (Input.GetKeyDown("space") && isOnGround) {
             playerRb.AddForce(new Vector3(0, jumpStrength), ForceMode.Impulse);
+            isOnGround = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground")) {
+            isOnGround = true;
         }
     }
 }
