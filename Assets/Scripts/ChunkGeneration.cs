@@ -40,8 +40,10 @@ public class ChunkGeneration : MonoBehaviour
         for (int i = 0, z = 0; z < size + 1; z++) {
             for (int x = 0; x < size + 1; x++) {
 
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f);
-                vertices[i] = new Vector3(x, y, z); //WHY WHEN Z IN Y_VALUE IT WORK???
+                //Add variation with Perlin Noise and Random
+                float y = Mathf.PerlinNoise(x * 0.05f + Random.Range(-0.05f, 0.05f),
+                    z * 0.05f + Random.Range(-0.05f, 0.05f)) * 3f;
+                vertices[i] = new Vector3(x, y, z);
                 i++;
             }
         }
@@ -76,5 +78,7 @@ public class ChunkGeneration : MonoBehaviour
 
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+
+        mesh.RecalculateNormals();
     }
 }
